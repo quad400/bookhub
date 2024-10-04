@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      .email-container {
+        font-family: Arial, sans-serif;
+        background-color: #f7f7f7;
+        padding: 20px;
+      }
+      .email-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+      }
+      .otp {
+        color: #4CAF50;
+        font-size: 24px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-container">
+      <div class="email-content">
+        <h2>Hello {{username}},</h2>
+        <p>Thank you for registering. Your OTP code is:</p>
+        <p class="otp">{{token}}</p>
+        <p>This OTP is valid for 3 minutes.</p>
+      </div>
+    </div>
+  </body>
+</html>

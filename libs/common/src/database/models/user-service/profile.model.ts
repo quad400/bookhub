@@ -1,12 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types } from 'mongoose';
-import { AbstractDocument } from '../abstract.schema';
+import { AbstractDocument } from '../../abstract.schema';
 
 export type ProfileDocument = Profile & Document;
 
 @Schema({ versionKey: false })
 export class Profile extends AbstractDocument {
-  @Prop({ type: Types.UUID, ref: 'User', required: true })
+  @Prop({ type: String, ref: 'User', required: true })
   user: string;
 
   @Prop({

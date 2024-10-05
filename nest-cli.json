@@ -45,6 +45,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/book-service/tsconfig.app.json"
       }
+    },
+    "hub-service": {
+      "type": "application",
+      "root": "apps/hub-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/hub-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/hub-service/tsconfig.app.json"
+      }
     }
   }
 }

@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Types } from "mongoose";
-import { AbstractDocument } from "../abstract.schema";
+import { AbstractDocument } from "../../abstract.schema";
 
 export type TokenDocument = Token & Document;
 

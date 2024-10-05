@@ -34,6 +34,14 @@ export const CustomError = (error: any) => {
         businessDescription: BusinessDescription.BAD_REQUEST,
         errors: error.response.message,
       });
+
+    case error.name === "JsonWebTokenError":
+      return BaseResponse.error({
+        businessDescription: BusinessDescription.UNAUTHORIZED,
+        errors: 'Invalid Authentication Token',
+        businessCode: BusinessCode.UNAUTHORIZED,
+      });
+
     default:
       return BaseResponse.error({
         businessCode: BusinessCode.INTERNAL_SERVER_ERROR,

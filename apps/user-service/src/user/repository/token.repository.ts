@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Model, Connection } from 'mongoose';
 import { AbstractRepository } from '@app/common';
-import { Token, TokenDocument } from '../model/token.model';
+import { Token, TokenDocument } from '../../../../../libs/common/src/database/models/token.model';
 
 @Injectable()
 export class TokenRepository extends AbstractRepository<Token> {

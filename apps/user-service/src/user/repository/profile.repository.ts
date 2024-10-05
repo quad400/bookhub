@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Model, Connection } from 'mongoose';
 import { AbstractRepository } from '@app/common';
-import { Profile, ProfileDocument } from '../model/profile.model';
+import { Profile, ProfileDocument } from '../../../../../libs/common/src/database/models/profile.model';
 
 @Injectable()
 export class ProfileRepository extends AbstractRepository<Profile> {

@@ -11,6 +11,7 @@ import {
 import { ModelModule } from '../config/model.module';
 import { BookConfigModule } from '../config/book-config.module';
 import { BookModule } from './book/book.module';
+import { HistoryModule } from './history/history.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { BookModule } from './book/book.module';
     AppConfigModule,
     ModelModule,
     BookModule,
+    HistoryModule,
   ],
   controllers: [BookServiceController],
   providers: [BookServiceService, RmqService],

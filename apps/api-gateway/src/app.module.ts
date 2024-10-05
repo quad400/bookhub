@@ -17,6 +17,8 @@ import { redisStore } from 'cache-manager-redis-yet';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { BookController } from './book-service/book.controller';
+import { HistoryController } from './book-service/history.controller';
+import { FeedbackController } from './book-service/feedback.controller';
 
 @Module({
   imports: [
@@ -48,7 +50,14 @@ import { BookController } from './book-service/book.controller';
       name: BOOK_SERVICE,
     }),
   ],
-  controllers: [AppController, AuthController, UserController, BookController],
+  controllers: [
+    AppController,
+    AuthController,
+    UserController,
+    BookController,
+    HistoryController,
+    FeedbackController,
+  ],
   providers: [
     AppService,
     JwtService,

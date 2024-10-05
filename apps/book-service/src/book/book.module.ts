@@ -4,6 +4,10 @@ import { BookController } from './controllers/book.controller';
 import { ModelModule } from 'apps/book-service/config/model.module';
 import { BookRepository } from './repos/book.repo';
 import { RmqModule, RmqService, USER_SERVICE } from '@app/common';
+import { FeedbackRepository } from './repos/feedback.repo';
+import { FeedbackController } from './controllers/feedback.controller';
+import { FeedbackService } from './services/feedback.service';
+import { HistoryRepository } from '../history/repo/history.repo';
 
 @Module({
   imports: [
@@ -13,7 +17,14 @@ import { RmqModule, RmqService, USER_SERVICE } from '@app/common';
       name: USER_SERVICE,
     }),
   ],
-  controllers: [BookController],
-  providers: [BookService, BookRepository, RmqService],
+  controllers: [BookController, FeedbackController],
+  providers: [
+    BookService,
+    BookRepository,
+    FeedbackRepository,
+    FeedbackService,
+    HistoryRepository,
+    RmqService,
+  ],
 })
 export class BookModule {}

@@ -8,11 +8,10 @@ import {
   RegenrateOtpDto,
   VerifyUserDto,
 } from './dto/auth.dto';
-import { BaseResponse, CustomError, MailProps, RmqService } from '@app/common';
+import { BaseResponse, CustomError, MailProps, RmqService, User } from '@app/common';
 import { BusinessCode } from '@app/common/enum';
 import { JwtService } from '@nestjs/jwt';
 import { TokenRepository } from '../user/repository/token.repository';
-import { User } from '../user/model/user.model';
 import { ProfileRepository } from '../user/repository/profile.repository';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
@@ -91,7 +90,7 @@ export class AuthService {
         throw new BadRequestException('Invalid credentials');
       }
 
-      const token = this.jwtService.sign({ sub: user });
+      const token = this.jwtService.sign({ sub: user._id });
       this.rmqService.ack(context);
       return BaseResponse.success({
         businessCode: BusinessCode.OK,
@@ -123,7 +122,7 @@ export class AuthService {
       }
       await this.tokenRepository.delete({ _id: token._id });
 
-      const access_token = this.jwtService.sign({ sub: user });
+      const access_token = this.jwtService.sign({ sub: user._id });
       this.rmqService.ack(context);
 
       return BaseResponse.success({

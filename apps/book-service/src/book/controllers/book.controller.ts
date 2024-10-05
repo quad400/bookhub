@@ -1,5 +1,8 @@
-import { CreateBookDto, CurrentUser, QueryDto } from '@app/common';
-import { CacheInterceptor, CacheKey, CacheTTL } from '@nestjs/cache-manager';
+import {
+  CreateBookDto,
+  QueryDto,
+  UpdateBookDto,
+} from '@app/common';
 import { Controller } from '@nestjs/common';
 import {
   Ctx,
@@ -21,47 +24,100 @@ export class BookController {
     return await this.bookService.createBook(data.userId, data.data, context);
   }
 
-  // async updateBook(
-  //   @CurrentUser() user: User,
-  //   @Param('bookId') bookId: string,
-  //   @Body() data: UpdateBookDto,
-  // ) {
-  //   return await this.bookService.updateBook(user._id, bookId, data);
-  // }
+  @MessagePattern('update_book')
+  async updateBook(
+    @Payload() data: { userId: string; bookId: string; data: UpdateBookDto },
+    @Ctx() context: RmqContext,
+  ) {
+    const { bookId, data: body, userId } = data;
+    return await this.bookService.updateBook(userId, bookId, body, context);
+  }
 
-  // async getBook(@Param('bookId') bookId: string) {
-  //   return await this.bookService.getBook(bookId);
-  // }
+  @MessagePattern('get_book')
+  async getBook(
+    @Payload() data: { bookId: string },
+    @Ctx() context: RmqContext,
+  ) {
+    return await this.bookService.getBook(data.bookId, context);
+  }
 
-  // async getBooks(@Query() query: QueryDto) {
-  //   return await this.bookService.getBooks(query);
-  // }
+  @MessagePattern('get_books')
+  async getBooks(
+    @Payload() data: { query: QueryDto },
+    @Ctx() context: RmqContext,
+  ) {
+    return await this.bookService.getBooks(data.query, context);
+  }
 
-  // async getMyBooks(@Query() query: QueryDto, @CurrentUser() user: User) {
-  //   return await this.bookService.getMyBooks(query, user._id);
-  // }
+  @MessagePattern('get_my_books')
+  async getMyBooks(
+    @Payload() data: { query: QueryDto; userId: string },
+    @Ctx() context: RmqContext,
+  ) {
+    return await this.bookService.getMyBooks(data.query, data.userId, context);
+  }
 
-  // async getDeletedBooks(@Query() query: QueryDto, @CurrentUser() user: User) {
-  //   return await this.bookService.getDeletedBooks(query, user._id);
-  // }
+  @MessagePattern('get_deleted_books')
+  async getDeletedBooks(
+    @Payload() data: { query: QueryDto; userId: string },
+    @Ctx() context: RmqContext,
+  ) {
+    return await this.bookService.getDeletedBooks(
+      data.query,
+      data.userId,
+      context,
+    );
+  }
 
-  // async deleteBook(@Param('bookId') bookId: string, @CurrentUser() user: User) {
-  //   return await this.bookService.deleteBook(user._id, bookId);
-  // }
+  @MessagePattern('delete_book')
+  async deleteBook(
+    @Payload() data: { bookId: string; userId: string },
+    @Ctx() context: RmqContext,
+  ) {
+    return await this.bookService.deleteBook(data.userId, data.bookId, context);
+  }
 
-  // async restoreBook(@Param('bookId') bookId: string, @CurrentUser() user: User) {
-  //   return await this.bookService.restoreBook(user._id, bookId);
-  // }
+  @MessagePattern('restore_book')
+  async restoreBook(
+    @Payload() data: { bookId: string; userId: string },
+    @Ctx() context: RmqContext,
+  ) {
+    return await this.bookService.restoreBook(
+      data.userId,
+      data.bookId,
+      context,
+    );
+  }
 
-  // async toggleArchievedBook(@Param('bookId') bookId: string, @CurrentUser() user: User) {
-  //   return await this.bookService.toggleArchievedBook(user._id, bookId);
-  // }
+  @MessagePattern('toggle_archieve_book')
+  async toggleArchievedBook(
+    @Payload() data: { bookId: string; userId: string },
+    @Ctx() context: RmqContext,
+  ) {
+    return await this.bookService.toggleArchievedBook(
+      data.userId,
+      data.bookId,
+      context,
+    );
+  }
 
-  // async toggleShareableBook(@Param('bookId') bookId: string, @CurrentUser() user: User) {
-  //   return await this.bookService.toggleShareableBook(user._id, bookId);
-  // }
+  @MessagePattern('toggle_share_book')
+  async toggleShareableBook(
+    @Payload() data: { bookId: string; userId: string },
+    @Ctx() context: RmqContext,
+  ) {
+    return await this.bookService.toggleShareableBook(
+      data.userId,
+      data.bookId,
+      context,
+    );
+  }
 
-  // async deleteBookPermanently(@Param('bookId') bookId: string, @CurrentUser() user: User) {
-  //   return await this.bookService.deleteBookPermanently(user._id, bookId);
-  // }
+  @MessagePattern('trash_book')
+  async trashBook(
+    @Payload() data: { bookId: string; userId: string },
+    @Ctx() context: RmqContext,
+  ) {
+    return await this.bookService.trashBook(data.userId, data.bookId, context);
+  }
 }

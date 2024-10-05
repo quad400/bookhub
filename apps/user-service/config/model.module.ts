@@ -1,9 +1,13 @@
-import { Global, Module } from "@nestjs/common";
-import { MongooseModule } from "@nestjs/mongoose";
-import { User, UserSchema } from "../src/user/model/user.model";
-import { Token, TokenSchema } from "../src/user/model/token.model";
-import { Profile, ProfileSchema } from "../src/user/model/profile.model";
-
+import { Global, Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
+import {
+  Token,
+  TokenSchema,
+  Profile,
+  ProfileSchema,
+  User,
+  UserSchema,
+} from '@app/common';
 
 @Global()
 @Module({
@@ -15,9 +19,7 @@ import { Profile, ProfileSchema } from "../src/user/model/profile.model";
     ]),
   ],
   exports: [
-    MongooseModule.forFeature([
-      { name: User.name, schema: UserSchema },
-    ]),
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
   ],
 })
 export class ModelModule {}

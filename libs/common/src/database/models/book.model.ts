@@ -1,6 +1,6 @@
-import { AbstractDocument } from '@app/common';
 import { BookEnum } from '@app/common/enum';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { AbstractDocument } from '../abstract.schema';
 
 
 @Schema({ versionKey: false, timestamps: true,strict:false })

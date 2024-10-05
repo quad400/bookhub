@@ -2,7 +2,7 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Model, Connection, FilterQuery } from 'mongoose';
 import { AbstractRepository } from '@app/common';
-import { User, UserDocument } from '../model/user.model';
+import { User, UserDocument } from '../../../../../libs/common/src/database/models/user.model';
 
 @Injectable()
 export class UserRepository extends AbstractRepository<User> {

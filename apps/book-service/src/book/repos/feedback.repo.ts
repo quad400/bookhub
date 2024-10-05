@@ -1,36 +1,17 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Model, Connection, FilterQuery } from 'mongoose';
-import { AbstractRepository, Book, QueryDto } from '@app/common';
+import { AbstractRepository, Feedback, QueryDto } from '@app/common';
 
 @Injectable()
-export class BookRepository extends AbstractRepository<Book> {
-  protected readonly logger = new Logger(BookRepository.name);
+export class FeedbackRepository extends AbstractRepository<Feedback> {
+  protected readonly logger = new Logger(FeedbackRepository.name);
 
   constructor(
-    @InjectModel(Book.name) bookModel: Model<Book>,
+    @InjectModel(Feedback.name) feedbackModel: Model<Feedback>,
     @InjectConnection() connection: Connection,
   ) {
-    super(bookModel, connection);
-  }
-
-  async findById(id: string): Promise<Book> {
-    const document = await this.model
-      .findOne({ _id: id, is_deleted: false })
-      .populate({
-        path: 'owner',
-        select: 'username email profile _id',
-      })
-      .select('-password');
-
-    if (!document) {
-      throw new NotFoundException(
-        `${this.model.collection.collectionName
-          .toUpperCase()
-          .slice(0, -1)} not found.`,
-      );
-    }
-    return document;
+    super(feedbackModel, connection);
   }
 
   async findPaginated({
@@ -38,8 +19,15 @@ export class BookRepository extends AbstractRepository<Book> {
     filterQuery,
   }: {
     query: QueryDto;
-    filterQuery?: FilterQuery<Book>;
-  }): Promise<any> {
+    filterQuery?: FilterQuery<Feedback>;
+  }): Promise<{
+    items: Feedback[];
+    totalItems: number;
+    totalPages: number;
+    currentPage: number;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+  }> {
     const { limit, page, searchField, searchValue, sortDirection, sortField } =
       query;
     const skip = (page - 1) * limit;
@@ -59,13 +47,18 @@ export class BookRepository extends AbstractRepository<Book> {
     // Find the documents with pagination, filtering, and sorting
     const items = await this.model
       .find({ ...filter, ...filterQuery })
-      .populate({
-        path: 'owner',
-        select: 'username email profile _id',
-      })
       .sort(sortFilter)
       .skip(skip)
       .limit(limit)
+      .populate({
+        path: 'user',
+        select: 'username email profile',
+      })
+      .populate({
+        path: 'book',
+        select:
+          'title book_cover author synopsis isbn genre shareable achieved',
+      })
       .exec();
 
     // Count the total number of documents for pagination metadata

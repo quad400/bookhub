@@ -9,9 +9,10 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import {  HttpAdapterHost } from '@nestjs/core';
+import { HttpAdapterHost } from '@nestjs/core';
 import { BaseResponse } from '../base.response';
 import { BusinessCode, BusinessDescription } from '../../enum';
+import { JsonWebTokenError } from '@nestjs/jwt';
 
 export class ValidationException extends HttpException {
   name = 'ValidationException';
@@ -22,7 +23,6 @@ export class HttpExceptions implements ExceptionFilter {
   constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
 
   catch(exception: any, host: ArgumentsHost): void {
-
     const { httpAdapter } = this.httpAdapterHost;
     const ctx = host.switchToHttp();
 
@@ -39,7 +39,7 @@ export class HttpExceptions implements ExceptionFilter {
         responseBody = BaseResponse.error({
           businessCode: BusinessCode.UNPROCESSED_ENTITY,
           businessDescription: BusinessDescription.UNPROCESSED_ENTITY,
-          errors: exceptionResponse
+          errors: exceptionResponse,
         });
         break;
       case exception instanceof BadRequestException:
@@ -49,7 +49,7 @@ export class HttpExceptions implements ExceptionFilter {
           errors: exception.message,
         });
         break;
-        
+
       case exception instanceof UnauthorizedException:
         responseBody = BaseResponse.error({
           businessCode: BusinessCode.UNAUTHORIZED,
@@ -71,6 +71,14 @@ export class HttpExceptions implements ExceptionFilter {
           businessDescription: BusinessDescription.NOT_FOUND,
           errors: exception.message,
           businessCode: BusinessCode.NOT_FOUND,
+        });
+        break;
+
+      case exception instanceof JsonWebTokenError:
+        responseBody = BaseResponse.error({
+          businessDescription: BusinessDescription.UNAUTHORIZED,
+          errors: 'Invalid Authentication Token',
+          businessCode: BusinessCode.UNAUTHORIZED,
         });
         break;
 

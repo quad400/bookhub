@@ -1,13 +1,12 @@
-import { AbstractDocument } from '@app/common';
-import { UserRole } from '@app/common';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Profile } from './profile.model';
+import { AbstractDocument } from '../abstract.schema';
+import { UserRole } from '../../enum/user.enum';
 
 export type UserDocument = User & Document;
 
 @Schema({ versionKey: false, timestamps: true })
 export class User extends AbstractDocument {
-
   @Prop({ type: String, unique: true, required: true })
   email: string;
 

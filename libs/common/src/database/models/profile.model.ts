@@ -1,6 +1,6 @@
-import { AbstractDocument } from '@app/common';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types } from 'mongoose';
+import { AbstractDocument } from '../abstract.schema';
 
 export type ProfileDocument = Profile & Document;
 

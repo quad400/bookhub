@@ -4,50 +4,35 @@ import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
 import {
+  AppConfigModule,
   AuthGuard,
   BOOK_SERVICE,
   DatabaseModule,
+  HUB_SERVICE,
   RmqModule,
   USER_SERVICE,
 } from '@app/common';
 import { AuthController } from './user-service/auth.controller';
 import { UserController } from './user-service/user.controller';
-import { CacheModule } from '@nestjs/cache-manager';
-import { redisStore } from 'cache-manager-redis-yet';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { BookController } from './book-service/book.controller';
 import { HistoryController } from './book-service/history.controller';
 import { FeedbackController } from './book-service/feedback.controller';
+import { HubController } from './hub-service/hub.controller';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      validationSchema: Joi.object({
-        MONGODB_URI: Joi.string().required(),
-        PORT: Joi.number().required(),
-        REDIS_URL: Joi.string().required(),
-      }),
-      envFilePath: './apps//.env',
-    }),
-
-    CacheModule.registerAsync({
-      useFactory: (configService: ConfigService) => ({
-        isGlobal: true,
-        store: redisStore,
-        url: configService.get<string>('REDIS_URL'),
-        ttl: 30000,
-        max: 10,
-      }),
-      inject: [ConfigService],
-    }),
+    AppConfigModule,
     DatabaseModule,
     RmqModule.register({
       name: USER_SERVICE,
     }),
     RmqModule.register({
       name: BOOK_SERVICE,
+    }),
+    RmqModule.register({
+      name: HUB_SERVICE,
     }),
   ],
   controllers: [
@@ -57,6 +42,7 @@ import { FeedbackController } from './book-service/feedback.controller';
     BookController,
     HistoryController,
     FeedbackController,
+    HubController
   ],
   providers: [
     AppService,

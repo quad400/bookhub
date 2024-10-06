@@ -1,4 +1,4 @@
-import { Prop, Schema } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { AbstractDocument } from '../../abstract.schema';
 
 @Schema({ versionKey: false })
@@ -15,3 +15,6 @@ export class HubProfile extends AbstractDocument {
   @Prop({ type: String, ref: 'Hub', required: true })
   hub: string;
 }
+
+
+export const HubProfileSchema = SchemaFactory.createForClass(HubProfile)

@@ -1,13 +1,10 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import {
   BaseResponse,
-  BOOK_SERVICE,
   CreateBookDto,
   CustomError,
   RmqService,
   UpdateBookDto,
-  USER_SERVICE,
-  UserTypes,
 } from '@app/common';
 import { BusinessCode } from '@app/common/enum';
 import { QueryDto } from '@app/common';

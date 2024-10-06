@@ -30,7 +30,6 @@ import { CacheInterceptor, CacheKey, CacheTTL } from '@nestjs/cache-manager';
 import { ClientProxy } from '@nestjs/microservices';
 
 @UseInterceptors(CacheInterceptor)
-@CacheTTL(30000)
 @ApiTags('Book')
 @Controller('books')
 @ApiBearerAuth()

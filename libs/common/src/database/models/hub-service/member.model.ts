@@ -1,4 +1,4 @@
-import { Prop, Schema } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { AbstractDocument } from '../../abstract.schema';
 import { HubRoleEnum } from '@app/common/enum';
 
@@ -10,7 +10,7 @@ export class Member extends AbstractDocument {
   @Prop({ type: String, ref: 'Hub', required: true })
   hub: string;
 
-  @Prop({ type: HubRoleEnum, default: HubRoleEnum.USER })
+  @Prop({ enum: HubRoleEnum, default: HubRoleEnum.USER })
   role: string;
 
   @Prop({ type: Boolean, default: false })
@@ -19,3 +19,6 @@ export class Member extends AbstractDocument {
   @Prop({ type: Date, default: Date.now() })
   joined_at: Date;
 }
+
+
+export const MemberSchema = SchemaFactory.createForClass(Member)

@@ -27,7 +27,6 @@ import { CacheInterceptor, CacheKey, CacheTTL } from '@nestjs/cache-manager';
 import { ClientProxy } from '@nestjs/microservices';
 
 @UseInterceptors(CacheInterceptor)
-@CacheTTL(30000)
 @ApiTags('Feedback')
 @ApiBearerAuth()
 @Controller('feedbacks')

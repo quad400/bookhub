@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { JwtModule } from '@nestjs/jwt';
 import * as Joi from 'joi';
 
 @Module({
@@ -9,13 +8,16 @@ import * as Joi from 'joi';
       isGlobal: true,
       validationSchema: Joi.object({
         RABBIT_MQ_URI: Joi.string().required(),
-        RABBIT_MQ_BOOK_QUEUE: Joi.string().required(),
+        RABBIT_MQ_HUB_QUEUE: Joi.string().required(),
+        REDIS_HOST: Joi.string().required(),
+        REDIS_PORT: Joi.number().required(),
       }),
-      envFilePath: './apps/book-service/.env',
+      envFilePath: './apps/hub-service/.env',
     }),
+
   ],
   exports: [
     ConfigModule
   ]
 })
-export class BookConfigModule {}
+export class HubConfigModule {}

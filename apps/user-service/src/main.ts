@@ -4,6 +4,7 @@ import {
   CustomRpcExceptionFilter,
   HttpExceptions,
   RmqService,
+  USER_SERVICE,
   ValidatorPipe,
 } from '@app/common';
 
@@ -15,7 +16,7 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptions(httpAdapterHost));
 
   const rmqService = app.get<RmqService>(RmqService);
-  app.connectMicroservice(rmqService.getOptions("USER"));
+  app.connectMicroservice(rmqService.getOptions(USER_SERVICE));
   
   app.useGlobalPipes(ValidatorPipe());
   await app.startAllMicroservices();

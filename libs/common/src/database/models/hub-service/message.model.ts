@@ -1,6 +1,6 @@
-import { Prop, Schema } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { AbstractDocument } from '../../abstract.schema';
-import { Attachments } from './attachment.model';
+import { Attachment } from './attachment.model';
 
 @Schema({ versionKey: false, timestamps: true })
 export class Message extends AbstractDocument {
@@ -22,6 +22,9 @@ export class Message extends AbstractDocument {
   @Prop({ type: Boolean, default: false })
   is_edited: boolean;
 
-  @Prop({ type: [Attachments], default: [] })
-  attachements: Attachments[];
+  @Prop({ type: [Attachment], default: [] })
+  attachements: Attachment[];
 }
+
+
+export const MessageSchema = SchemaFactory.createForClass(Message)

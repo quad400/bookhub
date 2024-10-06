@@ -8,7 +8,14 @@ import {
   RegenrateOtpDto,
   VerifyUserDto,
 } from './dto/auth.dto';
-import { BaseResponse, CustomError, MailProps, RmqService, User } from '@app/common';
+import {
+  BaseResponse,
+  CustomError,
+  MailProps,
+  RmqService,
+  SEND_EMAIL_QUEUE,
+  User,
+} from '@app/common';
 import { BusinessCode } from '@app/common/enum';
 import { JwtService } from '@nestjs/jwt';
 import { TokenRepository } from '../user/repository/token.repository';
@@ -28,8 +35,8 @@ export class AuthService {
     private configService: ConfigService,
     private rmqService: RmqService,
 
-    // @InjectQueue(Config.SEND_EMAIL_QUEUE)
-    // private readonly sendEmailQueue: Queue,
+    @InjectQueue(SEND_EMAIL_QUEUE)
+    private readonly sendEmailQueue: Queue,
   ) {}
 
   async create(data: CreateUserDto, context: RmqContext) {
@@ -61,8 +68,9 @@ export class AuthService {
         username: data.username,
       };
 
+      this.sendEmailQueue.add('welcome', mailData);
       this.rmqService.ack(context);
-      // await this.sendEmailQueue.add('welcome', mailData);
+
       return BaseResponse.success({
         businessCode: BusinessCode.CREATED,
         businessDescription: 'User created successfully',

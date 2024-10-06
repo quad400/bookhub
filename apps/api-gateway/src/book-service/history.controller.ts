@@ -18,7 +18,6 @@ import {
 import {
   BOOK_SERVICE,
   CurrentUser,
-  QueryDto,
   QueryWithoutSearchDto,
   User,
 } from '@app/common';

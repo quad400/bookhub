@@ -1,3 +1,5 @@
 export const USER_SERVICE="USER"
 export const BOOK_SERVICE="BOOK"
+export const HUB_SERVICE="HUB"
 export const SEND_EMAIL_QUEUE = "send-email"
+export const HUB_QUEUE="hub"

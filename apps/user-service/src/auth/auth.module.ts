@@ -21,11 +21,11 @@ import { ConfigService } from '@nestjs/config';
     }),
     BullModule.registerQueue({
       name: SEND_EMAIL_QUEUE,
-      defaultJobOptions: {
-        removeOnComplete: true,
-        attempts: 5,
-        removeOnFail: true,
-      },
+      // defaultJobOptions: {
+      //   removeOnComplete: true,
+      //   attempts: 5,
+      //   removeOnFail: true,
+      // },
     }),
   ],
   controllers: [AuthController],

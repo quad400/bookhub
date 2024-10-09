@@ -1,6 +1,6 @@
 import { UserRole } from '@app/common';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class UpdateUserDto {
   @ApiProperty()
@@ -22,4 +22,16 @@ export class UpdateUserDto {
   @IsString()
   @IsOptional()
   location?: string;
+}
+
+
+export class UpdateSocketConnectionDto{
+
+  @IsBoolean()
+  @IsNotEmpty()
+  is_online: boolean
+  
+  @IsString()
+  @IsNotEmpty()
+  socket_id: string
 }

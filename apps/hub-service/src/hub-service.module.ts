@@ -1,6 +1,11 @@
 import { Module } from '@nestjs/common';
 import { HubModule } from './hub/hub.module';
-import { AppConfigModule, BOOK_SERVICE, DatabaseModule, RmqModule, RmqService } from '@app/common';
+import {
+  AppConfigModule,
+  DatabaseModule,
+  RmqModule,
+  RmqService,
+} from '@app/common';
 import { HubConfigModule } from '../config/hub-config.module';
 import { ModelModule } from '../config/model.module';
 import { BullModule } from '@nestjs/bull';
@@ -13,10 +18,9 @@ import { MemberRepository } from './hub/repos/member.repo';
     HubModule,
     HubConfigModule,
     DatabaseModule,
-    RmqModule,
     AppConfigModule,
     ModelModule,
-   
+    RmqModule,
     BullModule.forRootAsync({
       useFactory: (configService: ConfigService) => {
         console.log(
@@ -34,6 +38,10 @@ import { MemberRepository } from './hub/repos/member.repo';
     }),
   ],
   controllers: [],
-  providers: [RmqService, HubConsumer, MemberRepository],
+  providers: [
+    RmqService,
+    HubConsumer,
+    MemberRepository,
+  ],
 })
 export class HubServiceModule {}

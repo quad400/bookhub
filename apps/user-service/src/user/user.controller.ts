@@ -1,8 +1,9 @@
 import { Controller } from '@nestjs/common';
 import { UserService } from './user.service';
-import { UpdateUserDto } from './dto/user.dto';
+import { UpdateUserDto,UpdateSocketConnectionDto } from './dto/user.dto';
 import {
   Ctx,
+  EventPattern,
   MessagePattern,
   Payload,
   RmqContext,
@@ -23,6 +24,19 @@ export class UserController {
   ) {
     const { body, userId } = data;
     return await this.userService.updateMe(body, userId, context);
+  }
+
+  @EventPattern('update_socket_connection')
+  async updateSocketConnection(
+    @Payload()
+    data: {
+      body: UpdateSocketConnectionDto;
+      userId: string;
+    },
+    @Ctx() context: RmqContext,
+  ) {
+    const { body, userId } = data;
+    return await this.userService.updateSocketConnection(body, userId, context);
   }
 
   @MessagePattern('get_me')

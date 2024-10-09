@@ -16,6 +16,8 @@ import {
 
 @Controller()
 export class HubController {
+
+
   constructor(private readonly hubService: HubService) {}
 
   @MessagePattern('create_hub')
@@ -31,6 +33,7 @@ export class HubController {
     @Payload() data: { userId: string; hubId: string; data: CreateHubDto },
     @Ctx() context: RmqContext,
   ) {
+   
     return await this.hubService.updateHub(
       data.userId,
       data.data,
@@ -38,7 +41,7 @@ export class HubController {
       context,
     );
   }
-
+  
   @MessagePattern('get_hubs')
   async getHubs(
     @Payload() data: { query: QueryWithoutSearchDto },

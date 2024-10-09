@@ -28,6 +28,12 @@ export class User extends AbstractDocument {
   @Prop({ type: Profile })
   profile: Profile;
 
+  @Prop({ type: String })
+  socket_id: string;
+
+  @Prop({ type: Boolean, default: false })
+  is_online: boolean;
+
   @Prop({ default: false })
   is_deleted: boolean;
 }

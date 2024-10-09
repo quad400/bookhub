@@ -2,7 +2,7 @@ import {
   CurrentUser,
   UpdateUserDto,
   USER_SERVICE,
-  UserTypes,
+  User,
 } from '@app/common';
 import { CacheInterceptor, CacheKey } from '@nestjs/cache-manager';
 import {
@@ -32,14 +32,14 @@ export class UserController {
 
   @Patch('update')
   @ApiOperation({ summary: 'Update User Information' })
-  async updateMe(@Body() data: UpdateUserDto, @CurrentUser() user: UserTypes) {
+  async updateMe(@Body() data: UpdateUserDto, @CurrentUser() user: User) {
     return this.userClient.send('update', { data, userId: user._id });
   }
 
   @CacheKey('GET_USER')
   @Get('me')
   @ApiOperation({ summary: 'Fetch User Information using user token' })
-  async getMe(@CurrentUser() user: UserTypes) {
+  async getMe(@CurrentUser() user: User) {
     return this.userClient.send('get_me', { userId: user._id });
   }
 

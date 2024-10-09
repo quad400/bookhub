@@ -11,8 +11,9 @@ import { Request } from 'express';
 import { IS_PUBLIC_KEY } from './jwt.strategy';
 import { ConfigService } from '@nestjs/config';
 import { USER_SERVICE } from '../constants';
-import { ClientProxy } from '@nestjs/microservices';
+import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
+import { WsException } from '@nestjs/websockets';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -32,8 +33,7 @@ export class AuthGuard implements CanActivate {
       return true;
     }
 
-    const request = context.switchToHttp().getRequest();
-
+    const request = this.requestType(context);
     const token = this.getAuthentication(context);
 
     try {
@@ -66,19 +66,57 @@ export class AuthGuard implements CanActivate {
     let authentication: string;
     if (context.getType() === 'rpc') {
       authentication = context.switchToRpc().getData().authentication;
+      if (!authentication) {
+        throw new RpcException('Authorization header missing');
+      }
     } else if (context.getType() === 'http') {
       const request = context.switchToHttp().getRequest();
       authentication = this.extractTokenFromHeader(request);
+      if (!authentication) {
+        throw new UnauthorizedException('Authorization header missing');
+      }
+    } else if (context.getType() === 'ws') {
+      const request = context.switchToWs().getClient();
+      authentication = request.handshake?.auth?.token?.split(' ')[1];
+      if (!authentication) {
+        throw new WsException('Authorization header missing');
+      }
     }
-    if (!authentication) {
-      throw new UnauthorizedException('Authorization header missing');
-    }
-
     return authentication;
   }
 
   private extractTokenFromHeader(request: Request): string | undefined {
     const [type, token] = request.headers.authorization?.split(' ') ?? [];
     return type === 'Bearer' ? token : undefined;
+  }
+
+  // private async handleWsAuth(context: ExecutionContext): Promise<boolean> {
+  //   const client = context.switchToWs().getClient();
+
+  //   if (!token) {
+  //     throw new WsException('Authentication token missing');
+  //   }
+
+  //   try {
+  //     const payload = this.jwtService.verify(token);
+  //     client.user = payload;
+  //     return true;
+  //   } catch {
+  //     throw new WsException('Invalid token');
+  //   }
+  // }
+
+  private requestType(ctx: ExecutionContext) {
+    if (ctx.getType() === 'rpc') {
+      const request = ctx.switchToRpc().getData();
+      return request;
+    } else if (ctx.getType() === 'http') {
+      const request = ctx.switchToHttp().getRequest();
+      return request;
+    } else if (ctx.getType() === 'ws') {
+      const request = ctx.switchToWs().getClient();
+      console.log(request);
+      return request;
+    }
   }
 }

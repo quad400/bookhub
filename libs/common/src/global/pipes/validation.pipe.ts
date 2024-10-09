@@ -1,5 +1,5 @@
 import { HttpStatus, ValidationPipe } from '@nestjs/common';
-import { ValidationException } from './exceptions/http.exception';
+import { ValidationException } from '../exceptions/http.exception';
 
 export const ValidatorPipe = (): ValidationPipe => {
   return new ValidationPipe({

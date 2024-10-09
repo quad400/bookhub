@@ -1,3 +1,4 @@
+import { ClientSocket } from '@app/common/interfaces';
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 
 export const CurrentUser = createParamDecorator(
@@ -8,6 +9,9 @@ export const CurrentUser = createParamDecorator(
     } else if (ctx.getType() === 'http') {
       const request = ctx.switchToHttp().getRequest();
       return request.user;
+    } else if (ctx.getType() === 'ws') {
+      const client: ClientSocket = ctx.switchToWs().getClient<ClientSocket>();
+      return client.user;
     }
   },
 );

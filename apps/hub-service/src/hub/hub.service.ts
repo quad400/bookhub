@@ -14,10 +14,11 @@ import {
   QueryWithoutSearchDto,
   RmqService,
 } from '@app/common';
-import { RmqContext } from '@nestjs/microservices';
+import { RmqContext, RpcException } from '@nestjs/microservices';
 import { MemberRepository } from './repos/member.repo';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
+import { WsException } from '@nestjs/websockets';
 
 @Injectable()
 export class HubService {
@@ -84,8 +85,10 @@ export class HubService {
         businessDescription: 'Hub Successfully Updated',
       });
     } catch (error) {
+      console.log(error)
       this.rmqService.nack(context);
-      return CustomError(error);
+      throw new WsException(error);
+      // return CustomError(error);
     }
   }
 

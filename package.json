@@ -34,6 +34,7 @@
     "@nestjs/platform-socket.io": "^10.4.4",
     "@nestjs/swagger": "^7.4.2",
     "@nestjs/websockets": "^10.4.4",
+    "@socket.io/redis-adapter": "^8.3.0",
     "amqp-connection-manager": "^4.1.14",
     "amqplib": "^0.10.4",
     "bcrypt": "^5.1.1",
@@ -47,8 +48,10 @@
     "mongoose": "^8.6.3",
     "nodemailer": "^6.9.15",
     "passport-jwt": "^4.0.1",
+    "redis": "^4.7.0",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
+    "socket.io": "^4.8.0",
     "uuidv4": "^6.2.13"
   },
   "devDependencies": {

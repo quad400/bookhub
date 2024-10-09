@@ -24,7 +24,7 @@ import {
   CurrentUser,
   QueryDto,
   UpdateBookDto,
-  UserTypes,
+  User
 } from '@app/common';
 import { CacheInterceptor, CacheKey, CacheTTL } from '@nestjs/cache-manager';
 import { ClientProxy } from '@nestjs/microservices';
@@ -39,7 +39,7 @@ export class BookController {
   @ApiOperation({ description: 'Create New Book' })
   @Post('create-book')
   async createBook(
-    @CurrentUser() user: UserTypes,
+    @CurrentUser() user: User,
     @Body() data: CreateBookDto,
   ) {
     return this.bookClient.send('create_book', {
@@ -52,7 +52,7 @@ export class BookController {
   @ApiParam({ name: 'bookId' })
   @Patch('update-book/:bookId')
   async updateBook(
-    @CurrentUser() user: UserTypes,
+    @CurrentUser() user: User,
     @Param('bookId') bookId: string,
     @Body() data: UpdateBookDto,
   ) {
@@ -145,7 +145,7 @@ export class BookController {
     required: false,
   })
   @Get('get-my-books')
-  async getMyBooks(@Query() query: QueryDto, @CurrentUser() user: UserTypes) {
+  async getMyBooks(@Query() query: QueryDto, @CurrentUser() user: User) {
     return this.bookClient.send('get_my_books', { query, userId: user._id });
   }
 
@@ -185,7 +185,7 @@ export class BookController {
   @Get('get-deleted-books')
   async getDeletedBooks(
     @Query() query: QueryDto,
-    @CurrentUser() user: UserTypes,
+    @CurrentUser() user: User,
   ) {
     return this.bookClient.send('get_deleted_books', {
       query,
@@ -197,7 +197,7 @@ export class BookController {
   @Delete('delete-book/:bookId')
   async deleteBook(
     @Param('bookId') bookId: string,
-    @CurrentUser() user: UserTypes,
+    @CurrentUser() user: User,
   ) {
     return this.bookClient.send('delete_book', { userId: user._id, bookId });
   }
@@ -206,7 +206,7 @@ export class BookController {
   @Put('restore-book/:bookId')
   async restoreBook(
     @Param('bookId') bookId: string,
-    @CurrentUser() user: UserTypes,
+    @CurrentUser() user: User,
   ) {
     return this.bookClient.send('restore_book', { userId: user._id, bookId });
   }
@@ -215,7 +215,7 @@ export class BookController {
   @Put('archieved-unarchieved-book/:bookId')
   async toggleArchievedBook(
     @Param('bookId') bookId: string,
-    @CurrentUser() user: UserTypes,
+    @CurrentUser() user: User,
   ) {
     return this.bookClient.send('toggle_archieve_book', {
       userId: user._id,
@@ -227,7 +227,7 @@ export class BookController {
   @Put('share-unshare-book/:bookId')
   async toggleShareableBook(
     @Param('bookId') bookId: string,
-    @CurrentUser() user: UserTypes,
+    @CurrentUser() user: User,
   ) {
     return this.bookClient.send('toggle_share_book', {
       userId: user._id,
@@ -239,7 +239,7 @@ export class BookController {
   @Delete('delete-book-permanently/:bookId')
   async deleteBookPermanently(
     @Param('bookId') bookId: string,
-    @CurrentUser() user: UserTypes,
+    @CurrentUser() user: User,
   ) {
     return this.bookClient.send('trash_book', { userId: user._id, bookId });
   }

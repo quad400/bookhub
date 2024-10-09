@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserRepository } from './repository/user.repository';
 import { BaseResponse, CustomError, RmqService } from '@app/common';
 import { BusinessCode } from '@app/common/enum';
-import { UpdateUserDto } from './dto/user.dto';
+import { UpdateSocketConnectionDto, UpdateUserDto } from './dto/user.dto';
 import { Types } from 'mongoose';
 import { ProfileRepository } from './repository/profile.repository';
 import { RmqContext } from '@nestjs/microservices';
@@ -18,14 +18,38 @@ export class UserService {
   async updateMe(data: UpdateUserDto, _id: string, context: RmqContext) {
     try {
       const user = await this.userRepository.findById(_id);
+      if (user.account_blocked) {
+        throw new UnauthorizedException('Account has been blocked');
+      }
       await this.profileRepository.findOneAndUpdate(
         { _id: user.profile._id },
         data,
       );
 
+      this.rmqService.ack(context);
+      return BaseResponse.success({
+        businessCode: BusinessCode.OK,
+        businessDescription: 'User Account Updated Successfully',
+      });
+    } catch (error) {
+      this.rmqService.nack(context);
+      return CustomError(error);
+    }
+  }
+
+  async updateSocketConnection(
+    data: UpdateSocketConnectionDto,
+    _id: string,
+    context: RmqContext,
+  ) {
+    try {
+      const user = await this.userRepository.findOne({ _id });
+
       if (user.account_blocked) {
         throw new UnauthorizedException('Account has been blocked');
       }
+      await this.userRepository.findOneAndUpdate({ _id }, data);
+      this.rmqService.ack(context);
       return BaseResponse.success({
         businessCode: BusinessCode.OK,
         businessDescription: 'User Account Updated Successfully',
@@ -43,6 +67,7 @@ export class UserService {
       if (user.account_blocked) {
         throw new UnauthorizedException('Account has been blocked');
       }
+      this.rmqService.ack(context);
       return BaseResponse.success({
         businessCode: BusinessCode.OK,
         businessDescription: 'User Account Fetch Successfully',
